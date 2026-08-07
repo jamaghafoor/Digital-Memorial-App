@@ -1,0 +1,20 @@
+{
+  "brand": "Tarjeta de Memoria",
+  "findMemory": "Buscar un recuerdo",
+  "createMemory": "Crear un recuerdo",
+  "signIn": "Iniciar sesión",
+  "signOut": "Cerrar sesión",
+  "dashboard": "Mis recuerdos",
+  "honor": "Honra una vida. Conserva su historia.",
+  "honorText": "Crea un homenaje digital duradero, compártelo y reúne cada tributo en un lugar especial.",
+  "searchPlaceholder": "Busca el nombre de un ser querido",
+  "explore": "Explorar recuerdos",
+  "recent": "Recordados recientemente",
+  "guestbook": "Libro de visitas",
+  "leaveTribute": "Dejar un tributo",
+  "save": "Guardar recuerdo",
+  "cancel": "Cancelar",
+  "public": "Público",
+  "private": "Privado",
+  "share": "Compartir este recuerdo"
+}
