@@ -104,5 +104,6 @@ npm run build
 ## Developer
 
 **Abdul Ghafoor**  
-Email: [abdul.ghafoor@example.com](mailto:abdul.ghafoor@example.com)  
-Portfolio: [portfolio.example.com/abdul-ghafoor](https://portfolio.example.com/abdul-ghafoor)
+[Write an Email](mailto:abdulghafoor1525@gmail.com)  
+[Linked Profile](https://www.linkedin.com/in/jam-abdul-ghafoor/)  
+[Checkout Portfolio](https://abdulghafoor.vercel.app/)
