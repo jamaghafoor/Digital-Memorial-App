@@ -43,7 +43,7 @@ function Search() {
 function Dashboard({ user }) {
   const { t } = useTranslation(); const navigate = useNavigate(); const [cards, setCards] = useState([]); const [error, setError] = useState('');
   const load = () => api('/cards/mine').then(({ cards: result }) => setCards(result)).catch((err) => setError(err.message));
-  useEffect(load, []);
+  useEffect(() => { load(); }, []); // eslint-disable-line react-hooks/exhaustive-deps
   const remove = async (id) => { if (window.confirm('Delete this memory? This cannot be undone.')) { await api(`/cards/${id}`, { method: 'DELETE' }); load(); } };
   return <main className="page dashboard"><div className="page-heading"><div><p className="eyebrow">Your private space</p><h1>{t('dashboard')}</h1><p className="muted">Create, manage, and share the lives you hold dear.</p></div><button className="solid-button" onClick={() => navigate('/dashboard/new')}>+ {t('createMemory')}</button></div>{error && <p className="form-error">{error}</p>}<div className="dashboard-list">{cards.map((card) => <article className="dashboard-card" key={card._id}><div className="mini-image">{card.imageUrl && <img src={card.imageUrl} alt="" />}</div><div><span className={`badge ${card.isPublic ? 'public' : ''}`}>{card.isPublic ? t('public') : t('private')}</span><h2>{card.name}</h2><p>{lifeDates(card)}</p></div><div className="card-actions"><Link to={`/memory/${card._id}`}>View</Link><button onClick={() => navigate(`/dashboard/${card._id}`)}>Edit</button><button className="danger" onClick={() => remove(card._id)}>Delete</button></div></article>)}{!cards.length && <div className="empty-card">Your memories will appear here. Create the first one when you’re ready.</div>}</div></main>;
 }
@@ -63,7 +63,7 @@ function ShareButtons({ card }) {
 
 function Guestbook({ cardId }) {
   const { t } = useTranslation(); const [entries, setEntries] = useState([]); const [form, setForm] = useState({ authorName: '', message: '' }); const [notice, setNotice] = useState('');
-  const load = () => api(`/guestbook/card/${cardId}`).then(({ entries: result }) => setEntries(result)); useEffect(load, [cardId]);
+  const load = () => api(`/guestbook/card/${cardId}`).then(({ entries: result }) => setEntries(result)); useEffect(() => { load(); }, [cardId]); // eslint-disable-line react-hooks/exhaustive-deps
   const submit = async (e) => { e.preventDefault(); try { const response = await api(`/guestbook/card/${cardId}`, { method: 'POST', body: JSON.stringify(form) }); setNotice(response.message); setForm({ authorName: '', message: '' }); } catch (error) { setNotice(error.message); } };
   return <section className="guestbook"><p className="eyebrow">Words from the heart</p><h2>{t('guestbook')}</h2><div className="tribute-list">{entries.map((entry) => <article key={entry._id}><strong>{entry.authorName}</strong><time>{formatDate(entry.createdAt)}</time><p>{entry.message}</p></article>)}{!entries.length && <p className="muted">No tributes have been approved yet.</p>}</div><form className="tribute-form" onSubmit={submit}><h3>{t('leaveTribute')}</h3><input required value={form.authorName} onChange={(e) => setForm({ ...form, authorName: e.target.value })} placeholder="Your name" /><textarea required value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Share a memory or message of comfort…" /><button className="solid-button">Send tribute</button>{notice && <p className="muted">{notice}</p>}</form></section>;
 }
