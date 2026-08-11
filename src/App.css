@@ -10,6 +10,7 @@
 .header-actions { min-width:0; }
 .header-actions select { width:auto; flex:0 0 auto; }
 .header-actions .solid-button,.header-actions .outline-button,.header-actions .text-button { flex:0 0 auto; white-space:nowrap; }
+.form-success { color:#2f6b45; font-size:13px; margin:0 0 18px; }
 
 @media (max-width:1020px) {
   .site-header { gap:20px; padding:0 28px; }
