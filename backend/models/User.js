@@ -7,6 +7,9 @@ const userSchema = new mongoose.Schema({
   name: { type: String, trim: true, maxlength: 80 },
   preferredLanguage: { type: String, default: 'en' },
   role: { type: String, enum: ['user', 'admin'], default: 'user' },
+  isSuspended: { type: Boolean, default: false, index: true },
+  suspendedAt: Date,
+  suspensionReason: { type: String, trim: true, maxlength: 500 },
   refreshToken: { type: String, select: false }
 }, { timestamps: true });
 

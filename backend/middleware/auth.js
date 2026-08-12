@@ -8,6 +8,7 @@ exports.protect = async (req, res, next) => {
     const decoded = jwt.verify(token, process.env.JWT_ACCESS_SECRET);
     req.user = await User.findById(decoded.id);
     if (!req.user) return res.status(401).json({ message: 'Account no longer exists.' });
+    if (req.user.isSuspended) return res.status(403).json({ message: 'This account has been suspended.' });
     next();
   } catch (_) {
     res.status(401).json({ message: 'Invalid or expired access token.' });

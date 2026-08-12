@@ -2,8 +2,9 @@ const HeadstoneDesign = require('../models/HeadstoneDesign');
 
 exports.list = async (req, res, next) => {
   try {
-    const filter = req.query.category ? { category: req.query.category } : {};
-    const designs = await HeadstoneDesign.find(filter).sort('category name');
+    const filter = { isActive: { $ne: false } };
+    if (req.query.category) filter.category = req.query.category;
+    const designs = await HeadstoneDesign.find(filter).sort('sortOrder category name');
     res.json({ designs });
   } catch (error) { next(error); }
 };

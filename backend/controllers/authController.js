@@ -5,13 +5,14 @@ const signTokens = (user) => ({
   accessToken: jwt.sign({ id: user._id }, process.env.JWT_ACCESS_SECRET, { expiresIn: '15m' }),
   refreshToken: jwt.sign({ id: user._id }, process.env.JWT_REFRESH_SECRET, { expiresIn: '30d' })
 });
-const safeUser = (user) => ({ id: user._id, email: user.email, name: user.name, preferredLanguage: user.preferredLanguage });
+const safeUser = (user) => ({ id: user._id, email: user.email, name: user.name, preferredLanguage: user.preferredLanguage, role: user.role });
 
 exports.register = async (req, res, next) => {
   try {
     const { email, password, name, preferredLanguage } = req.body;
     if (!email || !password) return res.status(400).json({ message: 'Email and password are required.' });
-    const user = await User.create({ email, password, name, preferredLanguage });
+    const adminEmails = (process.env.ADMIN_EMAILS || '').split(',').map((value) => value.trim().toLowerCase()).filter(Boolean);
+    const user = await User.create({ email, password, name, preferredLanguage, role: adminEmails.includes(email.toLowerCase()) ? 'admin' : 'user' });
     const tokens = signTokens(user);
     user.refreshToken = tokens.refreshToken;
     await user.save({ validateBeforeSave: false });
@@ -24,6 +25,7 @@ exports.login = async (req, res, next) => {
     const { email, password } = req.body;
     const user = await User.findOne({ email: email?.toLowerCase() }).select('+password +refreshToken');
     if (!user || !(await user.comparePassword(password || ''))) return res.status(401).json({ message: 'Incorrect email or password.' });
+    if (user.isSuspended) return res.status(403).json({ message: 'This account has been suspended.' });
     const tokens = signTokens(user);
     user.refreshToken = tokens.refreshToken;
     await user.save({ validateBeforeSave: false });

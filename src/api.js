@@ -1,6 +1,6 @@
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
 const accessToken = () => localStorage.getItem("memory-card-access-token");
-const isNgrokApi = /\.ngrok(?:-free)?\.app(?:\/|$)/i.test(API_URL);
+const isNgrokApi = /\.ngrok(?:-free)?\.(?:app|dev)(?:\/|$)/i.test(API_URL);
 
 console.log("API_URL", API_URL);
 
@@ -32,7 +32,12 @@ export async function api(path, options = {}, retry = true) {
     // is present. It is harmless for local and non-ngrok API URLs.
     ...(isNgrokApi && { "ngrok-skip-browser-warning": "true" }),
   };
-  let response = await fetch(`${API_URL}${path}`, { ...options, headers });
+  let response;
+  try {
+    response = await fetch(`${API_URL}${path}`, { ...options, headers });
+  } catch (_) {
+    throw new Error("Unable to reach the server. Check that the API is running and its URL/CORS settings are correct.");
+  }
   if (
     response.status === 401 &&
     retry &&

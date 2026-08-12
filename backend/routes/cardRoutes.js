@@ -4,6 +4,7 @@ const { protect } = require('../middleware/auth');
 
 router.get('/search', controller.search);
 router.get('/public/:id', controller.publicCard);
+router.post('/:id/report-media', controller.reportMedia);
 router.get('/mine', protect, controller.listMine);
 router.post('/', protect, controller.create);
 router.get('/:id', protect, controller.getMine);

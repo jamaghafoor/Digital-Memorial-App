@@ -4,7 +4,11 @@ const MemoryCard = require('../models/MemoryCard');
 const GuestbookEntry = require('../models/GuestbookEntry');
 
 const publicUrl = (card) => `${process.env.FRONTEND_URL || 'http://localhost:3000'}/memory/${card._id}`;
-const withQr = async (card) => ({ ...card.toObject(), publicUrl: publicUrl(card), qrCode: await QRCode.toDataURL(publicUrl(card), { width: 360, margin: 2 }) });
+const withQr = async (card) => {
+  const result = card.toObject();
+  if (result.mediaModerationStatus && result.mediaModerationStatus !== 'clear') result.imageUrl = '';
+  return { ...result, publicUrl: publicUrl(card), qrCode: await QRCode.toDataURL(publicUrl(card), { width: 360, margin: 2 }) };
+};
 const getCard = async (id) => MemoryCard.findById(id).populate('headstoneDesignId');
 
 exports.listMine = async (req, res, next) => {
@@ -64,5 +68,14 @@ exports.search = async (req, res, next) => {
     if (diedAfter || diedBefore) filter.deathDate = { ...(diedAfter && { $gte: new Date(diedAfter) }), ...(diedBefore && { $lte: new Date(diedBefore) }) };
     const cards = await MemoryCard.find(filter).populate('headstoneDesignId').sort('-createdAt').limit(50);
     res.json({ cards });
+  } catch (error) { next(error); }
+};
+
+exports.reportMedia = async (req, res, next) => {
+  try {
+    const card = await MemoryCard.findById(req.params.id);
+    if (!card || !card.imageUrl) return res.status(404).json({ message: 'Media not found.' });
+    card.mediaReported = true; card.mediaReportReason = req.body.reason || ''; card.mediaReportedAt = new Date();
+    await card.save(); res.json({ message: 'Thank you. This media has been reported for review.' });
   } catch (error) { next(error); }
 };
