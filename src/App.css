@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500;600;700&family=Cormorant+Garamond:wght@500;600;700&family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,500&display=swap');
 
 :root { --ink:#26372f; --muted:#657269; --cream:#faf7f0; --paper:#fffdf8; --green:#436c58; --green-dark:#315341; --sage:#dbe4d5; --line:#e2e4da; --clay:#c97e5b; --serif:'Playfair Display', Georgia, serif; }
 * { box-sizing:border-box; } body { background:var(--paper); color:var(--ink); } a { color:inherit; text-decoration:none; } button, input, textarea, select { font:inherit; } button { cursor:pointer; }
@@ -80,4 +80,240 @@
 .photo-upload input:disabled {
   cursor: wait;
   opacity: .65;
+}
+
+/* Composite memorial artwork: each design gets its own safe inscription area. */
+.memorial-stone {
+  --inscription-left: 20%;
+  --inscription-top: 24%;
+  --inscription-width: 60%;
+  --inscription-height: 50%;
+  --portrait-size: 34%;
+  --stone-copy: #3d4541;
+  position: relative;
+  aspect-ratio: 937 / 1120;
+  margin: 0;
+  flex: 0 0 auto;
+}
+
+.memorial-stone--detail {
+  width: min(100%, 500px);
+}
+
+.memorial-stone__art {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.memorial-stone__inscription {
+  position: absolute;
+  left: var(--inscription-left);
+  top: var(--inscription-top);
+  width: var(--inscription-width);
+  height: var(--inscription-height);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: var(--stone-copy);
+  text-align: center;
+  text-shadow: 0 1px 1px #ffffff99;
+  pointer-events: none;
+}
+
+.memorial-stone__portrait {
+  width: var(--portrait-size);
+  aspect-ratio: 1;
+  flex: 0 0 auto;
+  object-fit: cover;
+  object-position: center 25%;
+  border: clamp(2px, .55vw, 4px) solid currentColor;
+  border-radius: 50%;
+  background: #e5e6df;
+  box-shadow: 0 1px 3px #26372f42;
+}
+
+.memorial-stone__portrait--empty {
+  display: grid;
+  place-items: center;
+  color: #68716d;
+}
+
+.memorial-stone__name {
+  display: -webkit-box;
+  max-width: 100%;
+  margin-top: 4%;
+  overflow: hidden;
+  font: 600 clamp(16px, 2.55vw, 31px) / 1.08 "Cinzel", Georgia, serif;
+  letter-spacing: .015em;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+
+.memorial-stone__dates {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  margin-top: 3%;
+  font: 600 clamp(10px, 1.35vw, 16px) / 1.08 "Cormorant Garamond", Georgia, serif;
+  letter-spacing: .035em;
+}
+
+.memorial-stone[data-design="heart"] {
+  --inscription-left: 24%;
+  --inscription-top: 17%;
+  --inscription-width: 49%;
+  --inscription-height: 49%;
+  --portrait-size: 36%;
+}
+
+.memorial-stone[data-design="urn"] {
+  --inscription-left: 30%;
+  --inscription-top: 26%;
+  --inscription-width: 40%;
+  --inscription-height: 48%;
+  --portrait-size: 42%;
+  --stone-copy: #fff7e6;
+}
+
+.memorial-stone[data-design="urn"] .memorial-stone__inscription {
+  text-shadow: 0 1px 3px #2f1c11, 0 0 2px #2f1c11;
+}
+
+.memorial-stone[data-design="red-arch"] {
+  --inscription-left: 20%;
+  --inscription-top: 24%;
+  --inscription-width: 60%;
+  --inscription-height: 51%;
+  --portrait-size: 34%;
+  --stone-copy: #f8e8d9;
+}
+
+.memorial-stone[data-design="red-arch"] .memorial-stone__inscription {
+  text-shadow: 0 1px 3px #4d211a, 0 0 2px #4d211a;
+}
+
+.memorial-stone[data-design="fairy"] {
+  --inscription-left: 27%;
+  --inscription-top: 50%;
+  --inscription-width: 46%;
+  --inscription-height: 29%;
+  --portrait-size: 31%;
+  --stone-copy: #eef4e9;
+}
+
+.memorial-stone[data-design="fairy"] .memorial-stone__inscription {
+  text-shadow: 0 1px 3px #243c31, 0 0 2px #243c31;
+}
+
+.memorial-stone[data-design="fairy"] .memorial-stone__name {
+  margin-top: 2%;
+  font-size: clamp(13px, 1.85vw, 21px);
+}
+
+.memorial-stone[data-design="fairy"] .memorial-stone__dates {
+  margin-top: 2%;
+  font-size: clamp(8px, 1vw, 12px);
+}
+
+.memorial-stone[data-design="book"] {
+  --inscription-left: 20%;
+  --inscription-top: 29%;
+  --inscription-width: 60%;
+  --inscription-height: 41%;
+  --portrait-size: 33%;
+}
+
+.memorial-stone[data-design="rose-arch"] {
+  --inscription-left: 21%;
+  --inscription-top: 26%;
+  --inscription-width: 58%;
+  --inscription-height: 49%;
+  --portrait-size: 35%;
+  --stone-copy: #59413d;
+}
+
+.tile-image--headstone {
+  height: 400px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f6f4ed;
+}
+
+.tile-image--headstone .memorial-stone {
+  width: auto;
+  height: 100%;
+}
+
+.memorial-stone--compact .memorial-stone__inscription {
+  justify-content: flex-start;
+  padding-top: 4%;
+}
+
+.memorial-stone--compact .memorial-stone__portrait {
+  width: clamp(48px, 4.6vw, 64px);
+  height: clamp(48px, 4.6vw, 64px);
+}
+
+.memorial-stone--compact .memorial-stone__name {
+  margin-top: 3%;
+  font-size: clamp(15px, 1.8vw, 22px);
+  font-weight: 700;
+  line-height: 1.08;
+}
+
+.memorial-stone--compact .memorial-stone__dates {
+  margin-top: 2%;
+  font-size: clamp(10px, 1.15vw, 14px);
+  font-weight: 700;
+  line-height: 1.05;
+}
+
+.memorial-stone--compact[data-design="fairy"] .memorial-stone__inscription {
+  padding-top: 1%;
+}
+
+.memorial-stone--compact[data-design="fairy"] .memorial-stone__portrait {
+  width: clamp(38px, 3.5vw, 48px);
+  height: clamp(38px, 3.5vw, 48px);
+}
+
+.memorial-stone--compact[data-design="fairy"] .memorial-stone__name {
+  font-size: clamp(12px, 1.35vw, 16px);
+}
+
+.memorial-stone--compact[data-design="fairy"] .memorial-stone__dates {
+  font-size: clamp(8px, .9vw, 10px);
+}
+
+.memorial-stone--compact[data-design="urn"] .memorial-stone__name {
+  font-size: clamp(13px, 1.45vw, 18px);
+  -webkit-line-clamp: 3;
+}
+
+.memory-hero:has(.memorial-stone) {
+  grid-template-columns: minmax(380px, 500px) minmax(0, 1fr);
+  gap: clamp(40px, 5vw, 68px);
+}
+
+@media (max-width: 820px) {
+  .memory-hero:has(.memorial-stone) {
+    grid-template-columns: 1fr;
+  }
+
+  .memorial-stone--detail {
+    width: min(100%, 430px);
+    justify-self: center;
+  }
+}
+
+@media (max-width: 470px) {
+  .tile-image--headstone {
+    height: 360px;
+  }
 }

@@ -3,6 +3,7 @@ import { Link, useParams } from "react-router-dom";
 import { api } from "../api";
 import ShareButtons from "../components/ShareButtons";
 import Guestbook from "../components/Guestbook";
+import MemorialStone from "../components/MemorialStone";
 import { lifeDates, setMeta } from "../utils";
 
 export default function MemoryPage() {
@@ -48,11 +49,13 @@ export default function MemoryPage() {
   return (
     <main className="memory-page">
       <section className="memory-hero">
-        {card.imageUrl && (
+        {card.headstoneDesignId?.imageUrl ? (
+          <MemorialStone card={card} />
+        ) : card.imageUrl ? (
           <div className="memory-photo">
             <img src={card.imageUrl} alt={card.name} />
           </div>
-        )}
+        ) : null}
         <div className="memory-main">
           <p className="eyebrow">In loving memory</p>
           <h1>{card.name}</h1>
@@ -60,15 +63,6 @@ export default function MemoryPage() {
           {card.epitaph && <blockquote>“{card.epitaph}”</blockquote>}
           <ShareButtons card={card} />
         </div>
-        {card.headstoneDesignId?.imageUrl && (
-          <aside className="design-preview">
-            <img
-              src={card.headstoneDesignId.imageUrl}
-              alt={card.headstoneDesignId.name}
-            />
-            <span>{card.headstoneDesignId.name}</span>
-          </aside>
-        )}
       </section>
       <section className="memory-content">
         <article>
