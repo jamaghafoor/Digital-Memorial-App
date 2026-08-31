@@ -2,7 +2,6 @@ import { useState, useEffect } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { api } from "../api";
-import CardTile from "../components/CardTile";
 import { lifeDates } from "../utils";
 
 export default function Dashboard({ user }) {
