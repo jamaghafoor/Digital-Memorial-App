@@ -11,6 +11,7 @@ The project gives families and communities a respectful place to remember a life
 - Secure registration and login with JWT access and refresh tokens
 - Private dashboard for creating and managing Memory Cards
 - Public memorial pages with QR code downloads and social sharing
+- Device photo uploads stored directly in MongoDB (no S3 account required)
 - Searchable public memories by name and life dates
 - Guestbook tributes with owner moderation
 - Headstone design gallery

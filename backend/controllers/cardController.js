@@ -3,6 +3,35 @@ const QRCode = require('qrcode');
 const MemoryCard = require('../models/MemoryCard');
 const GuestbookEntry = require('../models/GuestbookEntry');
 
+const MAX_STORED_IMAGE_BYTES = 600 * 1024;
+const IMAGE_DATA_URL = /^data:image\/(jpeg|png|webp);base64,([A-Za-z0-9+/]+={0,2})$/;
+
+const validateImage = (value) => {
+  if (!value) return;
+  if (typeof value !== 'string') {
+    const error = new Error('Photo data is invalid.');
+    error.statusCode = 400;
+    throw error;
+  }
+  // Keep previously saved external image URLs working when an older memory is
+  // edited. New photos from the editor are always stored as data URLs.
+  if (!value.startsWith('data:')) return;
+
+  const match = value.match(IMAGE_DATA_URL);
+  if (!match) {
+    const error = new Error('Photo must be a JPEG, PNG, or WebP image.');
+    error.statusCode = 400;
+    throw error;
+  }
+
+  const imageBytes = Buffer.from(match[2], 'base64').length;
+  if (!imageBytes || imageBytes > MAX_STORED_IMAGE_BYTES) {
+    const error = new Error('Photo is too large. Please upload a smaller image.');
+    error.statusCode = 413;
+    throw error;
+  }
+};
+
 const publicUrl = (card) => `${process.env.FRONTEND_URL || 'http://localhost:3000'}/memory/${card._id}`;
 const withQr = async (card) => {
   const result = card.toObject();
@@ -17,6 +46,7 @@ exports.listMine = async (req, res, next) => {
 
 exports.create = async (req, res, next) => {
   try {
+    validateImage(req.body.imageUrl);
     const card = await MemoryCard.create({ ...req.body, ownerId: req.user._id, shareToken: crypto.randomBytes(20).toString('hex') });
     res.status(201).json({ card: await withQr(await card.populate('headstoneDesignId')) });
   } catch (error) { next(error); }
@@ -43,6 +73,7 @@ exports.update = async (req, res, next) => {
   try {
     const card = await MemoryCard.findOne({ _id: req.params.id, ownerId: req.user._id });
     if (!card) return res.status(404).json({ message: 'Memory not found.' });
+    if (req.body.imageUrl !== undefined) validateImage(req.body.imageUrl);
     const allowed = ['name', 'bio', 'birthDate', 'deathDate', 'epitaph', 'imageUrl', 'headstoneDesignId', 'isPublic', 'reminderDate', 'reminderPhone'];
     allowed.forEach((field) => { if (req.body[field] !== undefined) card[field] = req.body[field]; });
     await card.save();

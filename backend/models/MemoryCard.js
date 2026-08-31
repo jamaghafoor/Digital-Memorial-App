@@ -7,7 +7,9 @@ const memoryCardSchema = new mongoose.Schema({
   birthDate: Date,
   deathDate: Date,
   epitaph: { type: String, trim: true, maxlength: 500 },
-  imageUrl: { type: String, trim: true },
+  // Photos are stored as compressed image data URLs so no external object
+  // storage provider is required. The limit keeps documents/API payloads safe.
+  imageUrl: { type: String, trim: true, maxlength: [850000, 'Photo is too large.'] },
   mediaReported: { type: Boolean, default: false, index: true },
   mediaReportReason: { type: String, trim: true, maxlength: 500 },
   mediaReportedAt: Date,

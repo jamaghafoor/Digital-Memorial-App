@@ -3,13 +3,13 @@ const mongoose = require('mongoose');
 const HeadstoneDesign = require('../models/HeadstoneDesign');
 
 const designs = [
-  { name: 'Floral Heart', category: 'Heart', imageUrl: '/headstone-designs/01_heart_headstone.jpg', tags: ['heart', 'floral', 'grey granite'], sortOrder: 10 },
-  { name: 'Classic Bronze Urn', category: 'Urn', imageUrl: '/headstone-designs/03_bronze_urn.jpg', tags: ['urn', 'bronze', 'classic'], sortOrder: 20 },
-  { name: 'Bronze Memorial Vase', category: 'Urn', imageUrl: '/headstone-designs/03_bronze_vase.jpg', tags: ['vase', 'bronze', 'classic'], sortOrder: 30 },
-  { name: 'Red Granite Arch', category: 'Traditional', imageUrl: '/headstone-designs/04_red_arch_headstone.jpg', tags: ['arch', 'red granite', 'traditional'], sortOrder: 40 },
-  { name: 'Garden Fairy', category: 'Sculptural', imageUrl: '/headstone-designs/05_fairy_headstone.jpg', tags: ['fairy', 'garden', 'green granite'], sortOrder: 50 },
-  { name: 'Open Book', category: 'Book', imageUrl: '/headstone-designs/06_open_book_headstone.jpg', tags: ['book', 'grey granite', 'traditional'], sortOrder: 60 },
-  { name: 'Rose Granite Arch', category: 'Traditional', imageUrl: '/headstone-designs/07_pink_arch_headstone.jpg', tags: ['arch', 'rose granite', 'traditional'], sortOrder: 70 }
+  { name: 'Floral Heart', category: 'Heart', imageUrl: '/headstone-designs/01_heart_headstone.jpg?v=cropped', tags: ['heart', 'floral', 'grey granite'], sortOrder: 10 },
+  { name: 'Classic Bronze Urn', category: 'Urn', imageUrl: '/headstone-designs/02_bronze_urn.jpg?v=cropped', tags: ['urn', 'bronze', 'classic'], sortOrder: 20 },
+  { name: 'Bronze Memorial Vase', category: 'Urn', imageUrl: '/headstone-designs/03_bronze_vase.jpg?v=cropped', tags: ['vase', 'bronze', 'classic'], sortOrder: 30 },
+  { name: 'Red Granite Arch', category: 'Traditional', imageUrl: '/headstone-designs/04_red_arch_headstone.jpg?v=cropped', tags: ['arch', 'red granite', 'traditional'], sortOrder: 40 },
+  { name: 'Garden Fairy', category: 'Sculptural', imageUrl: '/headstone-designs/05_fairy_headstone.jpg?v=cropped', tags: ['fairy', 'garden', 'green granite'], sortOrder: 50 },
+  { name: 'Open Book', category: 'Book', imageUrl: '/headstone-designs/06_open_book_headstone.jpg?v=cropped', tags: ['book', 'grey granite', 'traditional'], sortOrder: 60 },
+  { name: 'Rose Granite Arch', category: 'Traditional', imageUrl: '/headstone-designs/07_pink_arch_headstone.jpg?v=cropped', tags: ['arch', 'rose granite', 'traditional'], sortOrder: 70 }
 ];
 
 async function seedDesigns() {

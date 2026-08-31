@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { api } from "../api";
 import { initialCard } from "../utils";
+import { prepareMemoryPhoto } from "../imageUtils";
 
 export default function CardEditor() {
   const { t } = useTranslation();
@@ -12,6 +13,9 @@ export default function CardEditor() {
   const [designs, setDesigns] = useState([]);
   const [designError, setDesignError] = useState("");
   const [error, setError] = useState("");
+  const [photoError, setPhotoError] = useState("");
+  const [photoName, setPhotoName] = useState("");
+  const [processingPhoto, setProcessingPhoto] = useState(false);
   const editing = id !== "new";
   
   useEffect(() => {
@@ -45,6 +49,31 @@ export default function CardEditor() {
       ...form,
       [name]: e.target.type === "checkbox" ? e.target.checked : e.target.value,
     });
+
+  const selectPhoto = async (event) => {
+    const file = event.target.files?.[0];
+    if (!file) return;
+
+    setPhotoError("");
+    setProcessingPhoto(true);
+    try {
+      const imageUrl = await prepareMemoryPhoto(file);
+      setForm((current) => ({ ...current, imageUrl }));
+      setPhotoName(file.name);
+    } catch (err) {
+      setPhotoError(err.message);
+    } finally {
+      // Allow selecting the same file again after removing or retrying it.
+      event.target.value = "";
+      setProcessingPhoto(false);
+    }
+  };
+
+  const removePhoto = () => {
+    setForm((current) => ({ ...current, imageUrl: "" }));
+    setPhotoName("");
+    setPhotoError("");
+  };
     
   const submit = async (e) => {
     e.preventDefault();
@@ -117,15 +146,29 @@ export default function CardEditor() {
               placeholder="Always in our hearts"
             />
           </label>
-          <label>
-            Photo URL
+          <label className="photo-upload">
+            Photo
             <input
-              type="url"
-              value={form.imageUrl}
-              onChange={field("imageUrl")}
-              placeholder="https://…"
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              onChange={selectPhoto}
+              disabled={processingPhoto}
             />
+            <small>
+              {processingPhoto
+                ? "Preparing photo…"
+                : photoName || "Choose a JPEG, PNG, or WebP image from your device (up to 10 MB)."}
+            </small>
           </label>
+          {photoError && <p className="form-error">{photoError}</p>}
+          {form.imageUrl && (
+            <div className="photo-preview">
+              <img src={form.imageUrl} alt="Memorial preview" />
+              <button type="button" className="text-button" onClick={removePhoto}>
+                Remove photo
+              </button>
+            </div>
+          )}
         </section>
         <section>
           <h2>Memorial details</h2>
@@ -213,7 +256,9 @@ export default function CardEditor() {
           <Link className="outline-button" to="/dashboard">
             {t("cancel")}
           </Link>
-          <button className="solid-button">{t("save")}</button>
+          <button className="solid-button" disabled={processingPhoto}>
+            {processingPhoto ? "Preparing photo…" : t("save")}
+          </button>
         </div>
       </form>
     </main>
