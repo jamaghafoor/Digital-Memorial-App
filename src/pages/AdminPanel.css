@@ -623,12 +623,14 @@
 
 .ap-design-img-wrap {
   position: relative;
+  background: #f5f4ef;
 }
 
 .ap-design-img-wrap img {
   width: 100%;
-  height: 130px;
-  object-fit: cover;
+  height: 180px;
+  padding: 8px;
+  object-fit: contain;
   display: block;
 }
 
