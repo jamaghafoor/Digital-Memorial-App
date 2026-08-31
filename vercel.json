@@ -5,12 +5,14 @@
       "framework": "create-react-app"
     },
     "backend": {
-      "root": "backend"
+      "root": "backend",
+      "runtime": "node",
+      "entrypoint": "server.js"
     }
   },
   "rewrites": [
     {
-      "source": "/api(/.*)?",
+      "source": "/api(.*)",
       "destination": {
         "type": "service",
         "service": "backend"
