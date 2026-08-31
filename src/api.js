@@ -1,4 +1,6 @@
-const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000/api";
+const API_URL =
+  "https://slacked-identity-uncooked.ngrok-free.dev/api" ||
+  "http://localhost:5000/api";
 const accessToken = () => localStorage.getItem("memory-card-access-token");
 const isNgrokApi = /\.ngrok(?:-free)?\.(?:app|dev)(?:\/|$)/i.test(API_URL);
 
@@ -36,7 +38,9 @@ export async function api(path, options = {}, retry = true) {
   try {
     response = await fetch(`${API_URL}${path}`, { ...options, headers });
   } catch (_) {
-    throw new Error("Unable to reach the server. Check that the API is running and its URL/CORS settings are correct.");
+    throw new Error(
+      "Unable to reach the server. Check that the API is running and its URL/CORS settings are correct.",
+    );
   }
   if (
     response.status === 401 &&
