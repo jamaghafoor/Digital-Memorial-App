@@ -1,6 +1,4 @@
-const API_URL =
-  "https://slacked-identity-uncooked.ngrok-free.dev/api" ||
-  "http://localhost:5000/api";
+const API_URL = process.env.REACT_APP_API_URL || (process.env.NODE_ENV === "production" ? "/api" : "http://localhost:5001/api");
 const accessToken = () => localStorage.getItem("memory-card-access-token");
 const isNgrokApi = /\.ngrok(?:-free)?\.(?:app|dev)(?:\/|$)/i.test(API_URL);
 
