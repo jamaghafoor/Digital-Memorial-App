@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useParams } from 'react-router-dom';
 import { api } from '../api/client';
 import { LanguagePicker } from '../components/LanguagePicker';
+import { LoadingState } from '../components/LoadingState';
 import { MemorialDesign } from '../components/MemorialDesign';
 import type { Memorial } from '../types';
 const date = (value: string) => new Intl.DateTimeFormat(undefined, { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' }).format(new Date(value));
@@ -20,7 +21,7 @@ export function PublicMemorialPage() {
     });
   }, [memorial, t]);
   if (error) return <main className="center-state">{t('notFound')}</main>;
-  if (!memorial) return <main className="center-state">{t('loading')}</main>;
+  if (!memorial) return <main className="center-state"><LoadingState message={t('loadingPublicMemorial')} /></main>;
   const url = location.href; const shareText = `${t('inMemory')} ${memorial.fullName}`;
   return <main className="public-page"><div className="public-toolbar"><a className="wordmark" href="/">{t('brand')}</a><LanguagePicker /></div><div className="public-grid"><MemorialDesign memorial={memorial} /><section className="memorial-details"><p className="eyebrow">{t('inMemory')}</p><h2>{memorial.fullName}</h2><dl><div><dt>{t('born')}</dt><dd>{date(memorial.birthDate)}</dd></div><div><dt>{t('passed')}</dt><dd>{date(memorial.deathDate)}</dd></div><div><dt>{t('relationship')}</dt><dd>{memorial.relationship}</dd></div></dl><div className="share-actions">
     <a className="button primary" target="_blank" rel="noreferrer" href={`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`}>{t('shareFacebook')}</a>
