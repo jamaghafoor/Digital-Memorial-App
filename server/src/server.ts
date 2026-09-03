@@ -8,4 +8,9 @@ const start = async () => {
   startReminderJob();
   app.listen(env.port, () => console.log(`API listening on http://localhost:${env.port}`));
 };
-void start().catch((error) => { console.error(error); process.exit(1); });
+
+if (process.env.VERCEL !== '1') {
+  void start().catch((error) => { console.error(error); process.exit(1); });
+}
+
+export default app;
