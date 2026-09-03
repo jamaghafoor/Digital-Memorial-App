@@ -1,0 +1,11 @@
+import { Router } from 'express';
+import { adminUpdateMemorial, approveMemorial, listMemorials, listUsers, rejectMemorial } from '../controllers/adminController.js';
+import { requireAdmin, requireAuth } from '../middleware/auth.js';
+import { asyncHandler } from '../utils/asyncHandler.js';
+export const adminRouter = Router();
+adminRouter.use(requireAuth, requireAdmin);
+adminRouter.get('/memorials', asyncHandler(listMemorials));
+adminRouter.put('/memorials/:id/approve', asyncHandler(approveMemorial));
+adminRouter.put('/memorials/:id/reject', asyncHandler(rejectMemorial));
+adminRouter.put('/memorials/:id', asyncHandler(adminUpdateMemorial));
+adminRouter.get('/users', asyncHandler(listUsers));

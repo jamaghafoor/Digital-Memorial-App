@@ -1,0 +1,13 @@
+import { Router } from 'express';
+import { createMemorial, deleteMemorial, getMemorial, getPublicMemorial, myMemorials, searchMemorials, updateMemorial } from '../controllers/memorialController.js';
+import { requireAuth } from '../middleware/auth.js';
+import { asyncHandler } from '../utils/asyncHandler.js';
+export const memorialRouter = Router();
+memorialRouter.get('/public/:slug', asyncHandler(getPublicMemorial));
+memorialRouter.use(requireAuth);
+memorialRouter.post('/', asyncHandler(createMemorial));
+memorialRouter.get('/my', asyncHandler(myMemorials));
+memorialRouter.get('/search', asyncHandler(searchMemorials));
+memorialRouter.get('/:id', asyncHandler(getMemorial));
+memorialRouter.put('/:id', asyncHandler(updateMemorial));
+memorialRouter.delete('/:id', asyncHandler(deleteMemorial));

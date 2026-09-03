@@ -1,0 +1,18 @@
+{
+  "name": "memorial-app",
+  "private": true,
+  "workspaces": [
+    "server",
+    "web",
+    "mobile"
+  ],
+  "scripts": {
+    "build": "npm run build -w server && npm run build -w web && npm run typecheck -w mobile",
+    "dev:server": "npm run dev -w server",
+    "dev:web": "npm run dev -w web",
+    "typecheck": "npm run typecheck -w server && npm run typecheck -w web && npm run typecheck -w mobile"
+  },
+  "overrides": {
+    "react-native-screens": "4.24.0"
+  }
+}
