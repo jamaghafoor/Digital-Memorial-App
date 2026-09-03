@@ -1,10 +1,11 @@
 import cors from 'cors';
 import express from 'express';
-import rateLimit from 'express-rate-limit';
+import type { RequestHandler } from 'express';
+import { rateLimit } from 'express-rate-limit';
 import { readFile } from 'node:fs/promises';
 import { fileURLToPath } from 'node:url';
 import path from 'node:path';
-import helmet from 'helmet';
+import helmetPackage, { type HelmetOptions } from 'helmet';
 import { connectDatabase } from './config/db.js';
 import { env } from './config/env.js';
 import { errorHandler } from './middleware/error.js';
@@ -16,8 +17,13 @@ import { uploadRouter } from './routes/uploadRoutes.js';
 import { processYearlyReminders } from './services/reminderService.js';
 import { asyncHandler } from './utils/asyncHandler.js';
 
+// Helmet 8 publishes separate ESM/CJS declarations. Vercel's Express builder can
+// resolve the default import as a module namespace even though it is callable at
+// runtime, so keep that compatibility cast at this package boundary.
+const createHelmetMiddleware = helmetPackage as unknown as (options?: Readonly<HelmetOptions>) => RequestHandler;
+
 export const app = express();
-app.use(helmet({ contentSecurityPolicy: { directives: { imgSrc: ["'self'", 'data:', 'https:'], styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'], fontSrc: ["'self'", 'https://fonts.gstatic.com'] } } }));
+app.use(createHelmetMiddleware({ contentSecurityPolicy: { directives: { imgSrc: ["'self'", 'data:', 'https:'], styleSrc: ["'self'", "'unsafe-inline'", 'https://fonts.googleapis.com'], fontSrc: ["'self'", 'https://fonts.gstatic.com'] } } }));
 app.use(cors({ origin: env.webUrl.split(',').map((value) => value.trim()) }));
 app.use(express.json({ limit: '1mb' }));
 app.use('/api', rateLimit({ windowMs: 15 * 60 * 1000, limit: 300, standardHeaders: 'draft-8' }));
